@@ -47,3 +47,4 @@ endif
 
 - ability to have multiple rules for same target.
 - `-MMD`: flag that allows GCC to generate files for dependency tracking
+- dependency tracking should be below `all` rule

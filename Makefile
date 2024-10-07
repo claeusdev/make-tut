@@ -10,10 +10,11 @@ ifneq ($(V),1)
 Q = @
 endif
 
+all: $(targets)
+
 deps := $(patsubst %.o,%.d,$(objs)) # expands into main.d, fact.d 
 -include $(deps)
 
-all: $(targets)
 
 fact: $(objs)
 	@echo "Building objects => $@"
