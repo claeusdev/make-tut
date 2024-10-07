@@ -30,4 +30,4 @@ fact: $(objs)
 
 clean:
 	@echo "HouseKeeping ....."
-	$(Q)rm -f $(targets) $(objs)
+	$(Q)rm -f $(targets) $(objs) $(deps)
