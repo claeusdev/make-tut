@@ -1,16 +1,32 @@
-all: fact readme
+targets := fact README.html
+objs := main.o fact.o 
 
-fact: main.o fact.o
-	gcc -Wall -Wextra -Werror -o fact main.o fact.o
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror -MMD
+CFLAGS += -g
+PANDOC := pandoc
+
+ifneq ($(V),1)
+Q = @
+endif
+
+deps := $(patsubst %.o,%.d,$(objs)) # expands into main.d, fact.d 
+-include $(deps)
+
+all: $(targets)
+
+fact: $(objs)
+	@echo "Building objects => $@"
+	$(Q)$(CC) $(CFLAGS) -o $@ $^
+
+%.o: %.c %.h
+	@echo "Compiling => $@"
+	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
+
+%.html: %.md
+	@echo "Building docs => $@"
+	$(Q)$(PANDOC) -o $@ $<
 
 clean:
-	rm -f fact README.html main.o fact.o
-
-main.o: main.c fact.h
-	gcc -Wall -Wextra -Werror -c -o main.o main.c
-
-fact.o: fact.c fact.h
-	gcc -Wall -Wextra -Werror -c -o fact.o fact.c
-
-readme: README.md
-	pandoc -o README.html README.md
+	@echo "HouseKeeping ....."
+	$(Q)rm -f $(targets) $(objs)
